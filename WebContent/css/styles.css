@@ -1,0 +1,86 @@
+/* 
+	Cristian Montero - cmontero 647640
+	Ivan Sanchez - isanchez 594783 
+*/
+
+span.date {
+	color: #777;
+	/* 	float: right; */
+	font-size: 0.7em;
+	/* 	margin: 0.5em 9em 2em 0; */
+	position: relative;
+	/* 	text-align: right; */
+	left: 70px;
+	top: 10px;
+}
+
+.lblAbout {
+	color: #fff;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.msg {
+	display:block;
+	font-size: 0.9em;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.info {
+	background-color: #F7F45D;
+	color: #333;
+	border: solid 1px #C9C74E;
+}
+
+.correct {
+	background-color: #92F489;
+	color: #333;
+	border: solid 1px #4E8C48;
+}
+
+label.error {
+    float: none; 
+    color: red; 
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.4;
+    margin-top: 0.5em;
+    width: 100%;
+    display: block;
+}
+
+.triangle-border:before {
+	border-color: #5E7D9A transparent;
+	border-style: solid;
+	border-width: 15px 15px 0;
+	bottom: -15px;
+	content: "";
+	display: block;
+	left: 45;
+	position: absolute;
+	width: 0;
+}
+
+.triangle-border:after {
+	border-color: #FFFFFF transparent;
+	border-style: solid;
+	border-width: 13px 13px 0;
+	bottom: -13px;
+	content: "";
+	display: block;
+	left: 47;
+	position: absolute;
+	width: 0;
+}
+
+.triangle-border {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 2px solid #5E7D9A;
+	border-radius: 10px 10px 10px 10px;
+	color: #333333;
+	margin: 2em 0 0;
+	padding: 10px;
+	position: relative;
+	font-size: 0.8em;
+}

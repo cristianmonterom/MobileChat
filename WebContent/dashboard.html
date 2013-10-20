@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/styles.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-cookie.js"></script>
+<script type="text/javascript" src="js/welcome.js"></script>
+<script type="text/javascript" src="http://jquery.bassistance.de/validate/jquery.validate.js"></script>
+<script type="text/javascript" src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
+</head>
+<body>
+<div data-role="page" id="dashboard-page" data-theme="d" data-url="dashboard-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+        <a href="#about-panel" data-icon="delete" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Logout</a>
+		<div data-role="navbar" data-iconpos="left">
+		    <ul>
+		        <li><a href="#" data-icon="grid" class="ui-btn-active">Groups</a></li>
+		        <li><a href="#register-page" data-icon="arrow-d">Chat</a></li>
+		        <li><a href="#help-panel" data-icon="info">Help</a></li>
+		    </ul>
+		</div><!-- /navbar -->
+    </div><!-- /header -->
+    <div data-role="content">
+		<div data-role="collapsible-set" data-theme="b">
+		
+			<div data-role="collapsible" data-collapsed="false" >
+				<h3>Groups</h3>
+				<ul data-role="listview" data-filter="true" data-split-icon="plus">
+				  <li>
+					  <a href="acura.html">Group 1</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+				  </li>
+				  <li>
+					  <a href="acura.html">Group 2</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+				  </li>
+				  <li>
+					  <a href="acura.html">Group 3</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+				  </li>
+				  <li>
+					  <a href="acura.html">Group 4</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+				  </li>
+				</ul>
+			</div>
+			
+			<div data-role="collapsible">
+			<h3>Invitations</h3>
+				<ul data-role="listview" data-filter="true" data-split-icon="plus">
+				  <li>
+					  <a href="acura.html">Invitation 1</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a data-icon="plus" href="acura.html"></a>
+					  <a href="acura.html"></a>
+				  </li>
+				  <li>
+					  <a href="acura.html">Invitation 2</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a href="acura.html"></a>
+					  <a splitIcon="delete" href="acura.html"></a>
+				  </li>
+				  <li>
+					  <a href="acura.html">Invitation 3</a>
+					  <span class="ui-li-count" title="Number of Members">23</span>
+					  <a splitIcon="plus" href="acura.html"></a>
+					  <a splitIcon="delete" href="acura.html"></a>
+				  </li>
+				</ul>			
+			</div>
+			
+		</div>		
+    </div><!-- /content -->
+    <div data-role="footer" class="ui-bar" data-theme="c">
+   		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop">Add new group</a>
+   		<a href="#invitation-page" data-icon="bars">Invite friends</a>
+	</div>
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+
+    <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+            <h2>Help!</h2>
+            <p>You can create groups and invite friends to join to each group.
+            </p>
+        </div><!-- /article -->
+    </div><!-- /panel -->
+    
+    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+	    </div>
+	</div>
+	<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c"  data-disabled="false" data-shadow="true" data-corners="true" data-transition="none">
+		<div data-role="header" data-theme="a" class="ui-corner-top ui-header ui-bar-a" role="banner">
+	        <h3>Add New Group</h3>
+		</div>
+		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d" role="main">
+		<form id="formGroup">
+		     <input type="text" data-clear-btn="true" name="newgroup" id="newgroup" value="" class="required">
+		     <input type="submit" data-theme="b" data-inline="true" id="btnSave" value="Save" />
+		     <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Close</a>
+		</form>  
+		</div>
+	</div>
+
+	<div data-role="popup" id="popupOptions" data-overlay-theme="a" data-theme="c" style="max-width:200px;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" aria-disabled="false" data-disabled="false" data-shadow="true" data-corners="true" data-transition="none">
+		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d" role="main">
+			<ul data-role="listview" data-split-icon="none">
+			  <li>
+				  <a href="acura.html">Invite Friends</a>
+			  </li>
+			  <li>
+				  <a href="acura.html">Edit</a>
+			  </li>
+			  <li>
+				  <a href="acura.html">Delete</a>
+			  </li>
+			</ul>
+		</div>
+	</div>
+
+</div>
+<div data-role="page" id="chat-page" data-theme="d" data-url="chat-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+		<div data-role="navbar" data-iconpos="left">
+		    <ul>
+		        <li><a href="#login-page" data-icon="grid">Login</a></li>
+		        <li><a href="#" data-icon="arrow-d" class="ui-btn-active">Register / Recover Password</a></li>
+		        <li><a href="#help-panel" data-icon="info">Help</a></li>
+		    </ul>
+		</div><!-- /navbar -->        
+    </div><!-- /header -->
+    <div data-role="content">
+	    <h4>Group 1</h4>
+	    <div id="content">
+	    <p class="triangle-border">jjjjj</p>
+	    <span class="date">aaaaaaaaaaaaaaa</span>
+	    </div>
+    </div>
+    <div data-role="footer" class="ui-bar" data-theme="c">
+       	<form id="formChat">
+			<div class="ui-grid-a">
+				<div class="ui-block-a" style="width:92% !important"><input type="text" data-clear-btn="true" name="message" id="message" value="" ></div>
+				<div class="ui-block-b" style="width:8% !important"><button data-theme="b" data-inline="true" id="btnSend">Send</button></div>	   
+			</div>
+		</form>
+	</div>
+	
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+        
+     <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+			<h3 class="titleSection">Registration</h3>
+			<p>You will receive an email to confirm
+				your registration.</p>
+			<h3>Forgot Password?</h3>
+			<p>Enter your email and we will send you
+				an email with a new password.</p>
+				
+        </div><!-- /article -->
+    </div><!-- /panel -->   
+    
+    <div data-role="popup" id="popupError1" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage1"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose1">Close</a>
+	    </div>
+	</div>    
+</div>
+
+<!-- invite friends -->
+<div data-role="page" id="invitation-page" data-theme="d" data-url="invitation-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+        <a href="#about-panel" data-icon="delete" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Logout</a>
+    </div><!-- /header -->
+    <div data-role="content">
+			<div class="ui-grid-a" data-theme="c">
+				<div class="ui-block-a" style="width:90% !important"><h4>Invite friend</h4></div>
+				<div class="ui-block-b" style="width:10% !important">
+				<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right">Back</button>
+				<!--  a href="#dashboard-page" data-icon="arrow-l" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Back1</a--></div>	   
+			</div>    
+		
+		<ul data-role="listview" data-filter="true" data-split-icon="plus">
+		  <li>
+			  <a href="acura.html">Member 1</a>
+			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+		  </li>
+		  <li>
+			  <a href="acura.html">Member 2</a>
+			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+		  </li>
+		  <li>
+			  <a href="acura.html">Member 3</a>
+			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+		  </li>
+		  <li>
+			  <a href="acura.html">Member 4</a>
+			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
+		  </li>
+		</ul>
+	</div>
+			
+    </div><!-- /content -->
+    <!-- div data-role="footer" class="ui-bar" data-theme="c">
+   		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop">Add new group</a>
+   		<a href="#popupInvitation" data-icon="bars" data-rel="popup" data-role="button" data-transition="pop">Invite friends</a>
+	</div -->
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+
+    <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+            <h2>Help!</h2>
+            <p>You can create groups and invite friends to join to each group.
+            </p>
+        </div><!-- /article -->
+    </div><!-- /panel -->
+    
+    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+	    </div>
+	</div>
+	
+</div>
+</body>
+</html>

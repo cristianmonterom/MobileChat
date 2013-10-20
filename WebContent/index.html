@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/styles.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-cookie.js"></script>
+<script type="text/javascript" src="js/project.js"></script>
+<script type="text/javascript" src="http://jquery.bassistance.de/validate/jquery.validate.js"></script>
+<script type="text/javascript" src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
+</head>
+<body>
+<div data-role="page" id="login-page" data-theme="d" data-url="login-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+		<div data-role="navbar" data-iconpos="left">
+		    <ul>
+		        <li><a href="#" data-icon="grid" class="ui-btn-active">Login</a></li>
+		        <li><a href="#register-page" data-icon="arrow-d">Register / Recover Password</a></li>
+		        <li><a href="#help-panel" data-icon="info">Help</a></li>
+		    </ul>
+		</div><!-- /navbar -->
+    </div><!-- /header -->
+    <div data-role="content">
+        <h3>Login</h3>
+		<div id="divResultLogin" class="msg"></div>
+     	<form id="formLogin">
+     		<label for="emaillogin">Email: *</label>
+		     <input type="email" data-clear-btn="true"name="emaillogin" id="emaillogin" value="" class="required email">
+		     <label for="password">Password: *</label>
+		     <input type="password" data-clear-btn="true" name="password" id="password" value="" class="required">
+
+		     <input type="submit" data-theme="b" data-inline="true" id="btnLogin" value="Start Session" />
+		</form>
+    </div><!-- /content -->
+   
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+
+    <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+            <h2>Help!</h2>
+            <p>It is a system that allows you to chat with other registered members of the site.
+            	<br /><br />
+            	Just register or login to chat with friends in your own groups. 
+            </p>
+        </div><!-- /article -->
+    </div><!-- /panel -->
+    
+    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+	    </div>
+	</div>
+</div>
+<div data-role="page" id="register-page" data-theme="d" data-url="register-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+		<div data-role="navbar" data-iconpos="left">
+		    <ul>
+		        <li><a href="#login-page" data-icon="grid">Login</a></li>
+		        <li><a href="#" data-icon="arrow-d" class="ui-btn-active">Register / Recover Password</a></li>
+		        <li><a href="#help-panel" data-icon="info">Help</a></li>
+		    </ul>
+		</div><!-- /navbar -->        
+    </div><!-- /header -->
+    <div data-role="content">
+        <h3>Register / Recover Password</h3>
+     	<form id="formRegister">
+     		<label for="emailregister">Email:</label>
+       	    <input type="email" data-clear-btn="true" name="emailregister" id="emailregister" value="" >
+       	    <button data-theme="b" data-inline="true" id="btnRegister">Register</button>
+       	    <button data-theme="b" data-inline="true" id="btnPassword">Recover Password</button>
+		     <!-- input type="submit" data-theme="b" data-inline="true" id="btnLogin" value="Start Session" />
+		     <a href="#" data-role="button" data-theme="b" data-inline="true" id="btnRegister">Register</a>
+		     <a href="#" data-role="button" data-theme="b" data-inline="true" id="btnPassword">Recover Password</a-->
+		</form>
+    </div>
+
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+        
+     <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+			<h3 class="titleSection">Registration</h3>
+			<p>You will receive an email to confirm
+				your registration.</p>
+			<h3>Forgot Password?</h3>
+			<p>Enter your email and we will send you
+				an email with a new password.</p>
+				
+        </div><!-- /article -->
+    </div><!-- /panel -->   
+    
+    <div data-role="popup" id="popupError1" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage1"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose1">Close</a>
+	    </div>
+	</div>    
+</div>
+</body>
+</html>
+<script>
+	$("#formLogin").validate({
+		rules : {
+			emaillogin : {
+				required : true,
+				email : true
+			},
+			messages : {
+				emaillogin : {
+					required : "Enter an email",
+					email : "Email address is incorrect"
+				}
+			}
+		} ,
+		 submitHandler: function(form) {
+			 login();
+		 }
+	});
+
+	$("#formRegister").validate({
+		rules : {
+			emailregister : {
+				required : true,
+				email : true
+			},
+			messages : {
+				emailregister : {
+					required : "Enter an email",
+					email : "Email address is incorrect"
+				}
+			}
+		} ,
+		 submitHandler: function(form) {
+			 register();
+		 }
+	});
+
+
+	$("#formPassword").validate({
+		rules : {
+			emailregister : {
+				required : true,
+				email : true
+			},
+			messages : {
+				emailpassword : {
+					required : "Enter an email",
+					email : "Email address is incorrect"
+				}
+			}
+		} ,
+		 submitHandler: function(form) {
+			 sendPassword();
+		 }
+	});
+
+	$("#formReminder").validate({
+		rules : {
+			emailregister : {
+				required : true,
+				email : true
+			},
+			messages : {
+				emailregister : {
+					required : "Enter an email",
+					email : "Email address is incorrect"
+				}
+			}
+		} ,
+		 submitHandler: function(form) {
+			 reminder();
+		 }
+	});
+</script>
