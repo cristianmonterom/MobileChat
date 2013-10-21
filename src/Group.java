@@ -1,4 +1,5 @@
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -8,8 +9,12 @@ public class Group {
 	
 	private String _id;
 	private String _rev;
-	private List<GroupMember> groupUsers;
+	private List<GroupMember> groupMembers;
+	private List<User> groupUsers;
+	private List<String> groupUsersList;
 	private GroupMember owner;
+	private User UserOwner;
+	private String RealOwner;
 	private String groupName;
 	private String description;
 	private List<ChatMessage> groupMessages;
@@ -26,11 +31,45 @@ public class Group {
 		creationTimeStamp = new Timestamp(myDate.getTime());
 	}
 	
+	public Group(String groupName, User userOwner) {
+		// TODO Auto-generated constructor stub
+		this.groupName = groupName;
+		this.UserOwner = userOwner;
+		
+		groupMessages = new ArrayList<ChatMessage>();
+		groupUsers = new ArrayList<User>();
+		this.groupUsersList = new ArrayList<String>();
+		groupUsers.add(userOwner);
+		
+		Calendar c = Calendar.getInstance();
+		Date myDate = c.getTime();
+		creationTimeStamp = new Timestamp(myDate.getTime());
+	}
+	
+	public Group(String groupName, String realOwner) {
+		// TODO Auto-generated constructor stub
+		this.groupName = groupName;
+		this.RealOwner = realOwner;
+		
+		groupMessages = new ArrayList<ChatMessage>();
+		groupUsers = new ArrayList<User>();
+		this.groupUsersList = new ArrayList<String>();
+		this.groupUsersList.add(realOwner);
+		
+		Calendar c = Calendar.getInstance();
+		Date myDate = c.getTime();
+		creationTimeStamp = new Timestamp(myDate.getTime());
+		
+	}
+	
+	
 	public void AddMessage(ChatMessage message)
 	{
 		groupMessages.add(message);
 	}
 	
+	
+/*	
 	public boolean AddGroupMember(GroupMember newUser){
 		
 		boolean succesfullyAdded = false;
@@ -46,13 +85,90 @@ public class Group {
 		
 		return succesfullyAdded;
 	}
+	*/
 	
+	public boolean AddGroupMember(String newUser){
+		
+		boolean succesfullyAdded = false;
+		
+		//If user in list but not confirmed, then confirm it
+		//Confirm with DAO
+		//Update GroupMember Status
+		/*if(newUser.getGroupMemberState()== GroupMemberState.INVITED)
+		{
+			newUser.setGroupMemberState(GroupMemberState.CONFIRMED);
+			//UpdateDAO
+		}*/
+		try{
+			if(!groupUsersList.contains(newUser))
+			{
+			groupUsersList.add(newUser);
+			succesfullyAdded = true;
+			}
+		}catch(Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+		
+		return succesfullyAdded;
+	}
+
+	public boolean DeleteGroupMember(String newUser){
+		
+		boolean succesfullyDeleted = false;
+		
+		//If user in list but not confirmed, then confirm it
+		//Confirm with DAO
+		//Update GroupMember Status
+		/*if(newUser.getGroupMemberState()== GroupMemberState.INVITED)
+		{
+			newUser.setGroupMemberState(GroupMemberState.CONFIRMED);
+			//UpdateDAO
+		}*/
+		try{
+			if(!groupUsersList.contains(newUser))
+			{
+			groupUsersList.remove(newUser);
+			succesfullyDeleted = true;
+			}
+		}catch(Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+		
+		return succesfullyDeleted;
+	}
+
+	
+	public boolean AddGroupMember(User newUser){
+		
+		boolean succesfullyAdded = false;
+		
+		//If user in list but not confirmed, then confirm it
+		//Confirm with DAO
+		//Update GroupMember Status
+		/*if(newUser.getGroupMemberState()== GroupMemberState.INVITED)
+		{
+			newUser.setGroupMemberState(GroupMemberState.CONFIRMED);
+			//UpdateDAO
+		}*/
+		try{
+			groupUsers.add(newUser);
+			succesfullyAdded = true;
+		}catch(Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+		
+		return succesfullyAdded;
+	}
+
 	public boolean InviteGroupMember(GroupMember newUser){
 		
 		boolean succesfullyInvited = false;
 		
 		//Look if user is not in list
-		if(!groupUsers.contains(newUser))
+		if(!groupMembers.contains(newUser))
 		{
 			//Invite User
 			
@@ -97,7 +213,7 @@ public class Group {
 	}
 
 	public List<GroupMember> getGroupUsers() {
-		return groupUsers;
+		return groupMembers;
 	}
 
 	public GroupMember getOwner() {
@@ -114,6 +230,18 @@ public class Group {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<String> getGroupUsersList() {
+		return groupUsersList;
+	}
+
+	public String getRealOwner() {
+		return RealOwner;
+	}
+
+	public Timestamp getCreationTimeStamp() {
+		return creationTimeStamp;
 	}
 	
 	

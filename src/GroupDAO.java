@@ -89,11 +89,11 @@ public class GroupDAO {
 		}
 
 	
-	public boolean alreadyExistGroup(String email) {
+	public boolean alreadyExistGroup(String groupName) {
 	
 		try {
-			List<Group> list = dbClient.view("userByEmail/userByEmail")
-						.key(email).includeDocs(true).limit(1).query(Group.class);
+			List<Group> list = dbClient.view("group/view_getMessages")
+						.key(groupName).includeDocs(true).limit(1).query(Group.class);
 
 			if (list.get(0) != null) {
 				return true;
@@ -111,7 +111,7 @@ public class GroupDAO {
 		try {
 			// String token
 			//Change ViewName
-			List<Group> list = dbClient.view("userByEmail/userByEmail")
+			List<Group> list = dbClient.view("group/view_getMessages")
 						.includeDocs(true).key(groupName).limit(1).query(Group.class);
 
 			if (list.get(0) != null) {
@@ -130,7 +130,7 @@ public class GroupDAO {
 			// return null;
 	}
 
-	public boolean updateUser(Group group) {
+	public boolean updateGroup(Group group) {
 
 		Gson gson = new Gson();
 		String json;

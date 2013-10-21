@@ -11,13 +11,15 @@ public class ChatMessage implements JSONStreamAware, Comparable<ChatMessage> {
 	private String username;
 	private String message;
 	private Timestamp timestamp;
+	private String userID;
 
-	public ChatMessage(int id, String username, String message, Timestamp timestamp) {
+	public ChatMessage(int id, String username, String userID, String message, Timestamp timestamp) {
 		// super();
 		this.id = id;
 		this.username = username;
 		this.message = message;
 		this.timestamp = timestamp;
+		this.userID = userID;
 	}
 
 	public void writeJSONString(Writer out) throws IOException {
@@ -59,6 +61,14 @@ public class ChatMessage implements JSONStreamAware, Comparable<ChatMessage> {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 
 	@Override

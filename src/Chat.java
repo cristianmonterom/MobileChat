@@ -92,7 +92,7 @@ public class Chat extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	@Override
+	/*@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -121,13 +121,13 @@ public class Chat extends HttpServlet {
 				//Respuesta de CouchDB
 				Response responseCouch = dbClient.save(jsonObj);
 					
-				/*//Creo una lista nueva como artificio para poder devolverle la misma estructura al JS
+				//Creo una lista nueva como artificio para poder devolverle la misma estructura al JS
 				List<ChatMessage> mensajitoUnico = new ArrayList<ChatMessage>();
 				//Cargo la lista solo con el ultimo ChatMessage
 				mensajitoUnico.add(listaMensajes.get(listaMensajes.size()-1));
 				//Ahora lo paso a JSON
 				json = gson.toJson(mensajitoUnico);
-				*/
+				
 			}
 
 			int lastID = Integer.parseInt(request.getParameter("lastmessage"));
@@ -157,6 +157,6 @@ public class Chat extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println(e.getStackTrace());
 		}
-	}
+	}*/
 
 }
