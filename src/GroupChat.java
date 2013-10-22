@@ -59,6 +59,9 @@ public class GroupChat extends HttpServlet {
 		try {
 			if (!request.getParameter("message").toString().equals("")) {
 				
+				boolean test = GroupNameAlreadyExistForUser("Anormales", "dy@DaddyYankee.com");
+				boolean test2 = GroupNameAlreadyExistForUser("Rompepaletas", "dy@DaddyYankee.com");
+				
 				Group grupazo = GetGroup("6a6693a3a0aa4252b1203a16548998c8");
 				
 				Timestamp creationTimeStamp = getCurrentTimestamp();
@@ -158,6 +161,11 @@ public class GroupChat extends HttpServlet {
 		
 		return groupCreatedSuccesfully;
 		
+	}
+	
+	private boolean GroupNameAlreadyExistForUser(String groupName, String userName)
+	{
+			return groupDAO.alreadyExistGroup(groupName, userName);
 	}
 	
 	private Group GetGroupByName(String groupName)
