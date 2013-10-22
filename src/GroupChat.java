@@ -247,15 +247,15 @@ public class GroupChat extends HttpServlet {
 			return groupUserDeletedSuccesfully;
 	}
 	
- 	private boolean DeleteGroup(String groupName)
+ 	private boolean DeleteGroup(String groupName, String performingUser)
 	{
 		boolean groupDeletedSuccesfully = false;
 		
 		try{
 		
 			Group tempGroup = GetGroup(groupName);
-			//If group doesn't exists
-			if(tempGroup !=null){
+			//If group exists and performing user is the owner
+			if(tempGroup !=null && performingUser.equals(tempGroup.getRealOwner())){
 				
 			groupDeletedSuccesfully = groupDAO.remove(tempGroup);
 			}else{
