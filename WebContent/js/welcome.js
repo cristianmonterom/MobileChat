@@ -38,7 +38,10 @@ $(document).ready(function() {
           history.back();
           return false;
     });	
-	//loadGroups();
+	
+	$( "#btnDelete" ).click(function() {
+		validateOwnerGroup();
+		});
 });
 
 
@@ -262,6 +265,8 @@ function acceptInvitations(){
 }
 
 function loadGroupMembers(control) {
+	var isOwner = isOwner();
+	
 	$.getJSON(servlet, {
 		"action" : "loadGroupMembers",
 		"currentGroup" : currentGroup
@@ -269,21 +274,38 @@ function loadGroupMembers(control) {
 		var output = '';
 		for (var i = 0; i< data.length; i++) {
 			output += '<li>';
-			output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(' +data[i]+ ');">' +data[i]+ '</a>';
+			if (isOwner) {
+				output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(\'' +data[i]+ '\');">' +data[i]+ '</a>';
+			} else {
+				output += '<a href="#" data-rel="popup" data-transition="pop" onclick="setCurrentUser(\'' +data[i]+ '\');">' +data[i]+ '</a>';
+			}
 			output += '</li>';
-			
 		}
-//		$.each(data, function(i, item) {
-//			output += '<li>';
-//			output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(' +item.email+ ');">' +item.email+ '</a>';
-//			output += '</li>';
-//		});
 		$(control).html(output);
 		$(control).listview('refresh');
 	}).fail(function(jqxhr, textStatus, error) {
 		var err = textStatus + ', ' + error;
 		console.log("Request Failed: " + err);
 	});
+}
+
+function isOwner(){
+	$.getJSON(servlet, {
+		"action" : "checkOwner",
+		"currentGroup" : currentGroup
+	}).done(function(data) {
+		$.each(data, function(i, item) {
+			if (item.typeOfMessage == "correct" && item.message == "OK"){
+				return true;
+			} else {
+				return false;
+			}
+		});
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+	//return false;
 }
 
 function saveGroup() {
@@ -313,3 +335,39 @@ function saveGroup() {
 }
 
 
+function deleteGroup() {
+	var isOwner1 = isOwner();
+	if (!isOwner1){
+		showMessages("#popupError", "#popmessage", "error", "You are not the owner of the group. You cannot delete it.");
+		return;
+	}
+	$.getJSON(servlet, {
+		"action" : "deleteGroup",
+		"currentGroup" : currentGroup
+	}).done(function(data) {
+		$.each(data, function(i, item) {
+			if (item.typeOfMessage == "correct") {
+				//$("#popupDialog").popup( "close" );
+				loadGroups();
+			} else {
+				//$("#popmessagegroup").append(item.message);
+				showMessages("#popupError", "#popmessage", item.typeOfMessage, item.message);
+			}
+		});
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function validateOwnerGroup() {
+	var isOwner1 = isOwner();
+	alert(isOwner1);
+	if (!isOwner1){
+		showMessages("#popupError", "#popmessage", "error", "You are not the owner of the group. You cannot delete it.");
+		$("#popupError").popup("open");
+		return false;
+	}
+	$("#popDelete").popup("open");
+	return true;
+}
