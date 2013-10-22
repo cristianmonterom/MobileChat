@@ -1,3 +1,8 @@
+var currentGroup = 0;
+var currentUser = '';
+var currentInvitation = 0;
+var servlet = "GroupServlet";
+
 $.ajaxSetup({
 	// Disable caching of AJAX responses */
 	// to make it works in IE
@@ -12,7 +17,31 @@ $(document).ready(function() {
 	$("#divResultLogout").hide();
 	$("#divResultPassword").hide();
 	$("#divResultCancel").hide();
+	$("#formLogout").validate({
+		  submitHandler: function(form) {
+		    logout();
+		  }
+		});
+	$("#formGroup").validate({
+		  submitHandler: function(form) {
+		    saveGroup();
+		  }
+		});	
+	$("#btnBack")
+    .click(function() {
+          history.back();
+          return false;
+    });
+
+	$("#btnBack1")
+    .click(function() {
+          history.back();
+          return false;
+    });	
+	//loadGroups();
 });
+
+
 
 function validateLogin() {
 	$.getJSON("ValidateLogin", {
@@ -59,7 +88,8 @@ function resetPassword() {
 		"token" : $.cookie("Wachamarei")
 	}).done(function(data) {
 		$.each(data, function(i, item) {
-			showMessages("#divResultPassword", item.typeOfMessage, item.message);
+//			showMessages("#divResultPassword", item.typeOfMessage, item.message);
+			showMessages("#popupError", "#popmessage", item.typeOfMessage, item.message);
 		});
 	}).fail(function(jqxhr, textStatus, error) {
 		var err = textStatus + ', ' + error;
@@ -79,7 +109,8 @@ function deleteRegistration() {
 					window.location = item.message;
 					return;
 				}
-				showMessages("#divResultCancel", item.typeOfMessage, item.message);
+//				showMessages("#divResultCancel", item.typeOfMessage, item.message);
+				showMessages("#popupError", "#popmessage", item.typeOfMessage, item.message);
 			});
 		}).fail(function(jqxhr, textStatus, error) {
 			var err = textStatus + ', ' + error;
@@ -88,13 +119,197 @@ function deleteRegistration() {
 	}
 }
 
-function showMessages(div, typeOfMessage, message){
-	$(div).empty();
-	$(div).show();
-	$(div).removeClass("error correct info");
-	$(div).addClass(typeOfMessage);
-	$(div).append(message);
-	if (typeOfMessage == "error" || typeOfMessage == "correct") {
-		$(div).delay(4000).fadeOut();
-	}
+//function showMessages(div, typeOfMessage, message){
+//	$(div).empty();
+//	$(div).show();
+//	$(div).removeClass("error correct info");
+//	$(div).addClass(typeOfMessage);
+//	$(div).append(message);
+//	if (typeOfMessage == "error" || typeOfMessage == "correct") {
+//		$(div).delay(4000).fadeOut();
+//	}
+//}
+
+function showMessages(div, lblmessage, typeOfMessage, message){
+	$(div).popup("open");
+	$(lblmessage).append(message);
 }
+
+function setCurrentGroup(groupId){
+	currentGroup = groupId;
+	//$.cookie("currentGroup", groupId);	
+	$("#gnumber").text(currentGroup);
+}
+
+function setCurrentUser(userId){
+	currentUser = userId;
+	$("#gnumber").text(currentUser);
+}
+
+function setCurrentInvitation(invitationId){
+	currentInvitation = invitationId;
+	$("#gnumber").text(currentInvitation);
+}
+
+$(document).on("pageinit", "#dashboard-page", function () {
+	loadGroups();
+	loadInvitations("#listInvitations");
+});
+
+$(document).on("pageinit", "#invitation-page", function () {
+	loadUsers("#listUsers");
+});
+
+$(document).on("pageinit", "#groupusers-page", function () {
+	loadGroupMembers("#listGroupMembers");
+});
+
+function loadGroups() {
+	$.getJSON("GroupServlet", {
+		"action" : "loadGroups"
+	}).done(function(data) {
+		var output = '';
+		$.each(data, function(i, item) {
+			output += '<li><a href="#chat" >' +item.name+ '</a>';
+			//output += '<span class="ui-li-count" title="Number of Members">' +item.numberMembers+ '</span>';
+			output += '<a href="#popupOptions" data-rel="popup" data-transition="pop" onclick="setCurrentGroup(\'' + item.id + '\')"></a>';
+			output += '</li>';
+		});
+		$('#listGroups').html(output);
+		$('#listGroups').listview('refresh');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function inviteFriends(){
+	loadGroupsSelect("#selectlistGroup");
+}
+
+function loadGroupsSelect(control) {
+	$.getJSON("GroupServlet", {
+		"action" : "loadGroups"
+	}).done(function(data) {
+		$(control).empty();
+		var select = '';
+		if (currentGroup == 0){
+			select = 'selected="selected"';
+		}
+		var output = '<option value="0" ' + select + '>Select a group</option>';
+		$.each(data, function(i, item) {
+			if (item.id == currentGroup){
+				select = 'selected="selected"';
+			} else {
+				select = '';
+			}
+			output += '<option value="' + item.id + '" ' + select + '>' +item.name+ '</option>';
+		});
+		$(control).append(output);
+		$(control).selectmenu('refresh');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function loadUsers(control) {
+	$.getJSON("GroupServlet", {
+		"action" : "loadUsers"
+	}).done(function(data) {
+		var output = '';
+		$.each(data, function(i, item) {
+			output += '<li>';
+			output += '<a href="#popConfirmInvitation" data-rel="popup" data-transition="pop" onclick="setCurrentUser(' +item.email+ ');">' +item.email+ '</a>';
+			output += '</li>';
+		});
+		$(control).html(output);
+		$(control).listview('refresh');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function loadInvitations(control) {
+	$.getJSON("GroupServlet", {
+		"action" : "loadInvitations"
+	}).done(function(data) {
+		var output = '';
+		$.each(data, function(i, item) {
+			output += '<li>';
+			output += ' <a href="#popupOptionsInvitations" data-rel="popup" data-transition="pop" data-position-to="#divMainContent" id="invit' + item.id + '" onclick="setCurrentInvitation(' + item.id + ')">' +item.name+ '</a>';
+			output += '</li>';
+		});
+		$(control).html(output);
+		$(control).listview('refresh');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function acceptInvitations(){
+	$.getJSON(servlet, {
+		"action" : "acceptInvitation",
+		"groupId" : currentInvitation
+	}).done(function(data) {
+		alert('invitation accepted');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function loadGroupMembers(control) {
+	$.getJSON(servlet, {
+		"action" : "loadGroupMembers",
+		"currentGroup" : currentGroup
+	}).done(function(data) {
+		var output = '';
+		for (var i = 0; i< data.length; i++) {
+			output += '<li>';
+			output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(' +data[i]+ ');">' +data[i]+ '</a>';
+			output += '</li>';
+			
+		}
+//		$.each(data, function(i, item) {
+//			output += '<li>';
+//			output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(' +item.email+ ');">' +item.email+ '</a>';
+//			output += '</li>';
+//		});
+		$(control).html(output);
+		$(control).listview('refresh');
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+function saveGroup() {
+	$("#popmessagegroup").append("");
+	if ($("#newgroup").val().trim() == "") {
+		return;
+	}
+	$.getJSON(servlet, {
+		"action" : "createGroup",
+		"newGroup" : $("#newgroup").val()
+	}).done(function(data) {
+		$.each(data, function(i, item) {
+			if (item.typeOfMessage == "correct") {
+				$("#popupDialog").popup( "close" );
+				$("#newgroup").val("");
+				loadGroups();
+			} else {
+				//$("#popupDialog").popup( "close" );
+				$("#popmessagegroup").append(item.message);
+				//showMessages("#popupError", "#popmessage", item.typeOfMessage, item.message);
+			}
+		});
+	}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
+}
+
+
