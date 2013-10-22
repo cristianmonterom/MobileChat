@@ -88,7 +88,7 @@ public class GroupServlet extends HttpServlet {
 					CommonFunctions.returnMessage(response, TypeOfMessage.ERROR, "You are not the owner of the group. You cannot delete it.");			
 				}
 			}  else if (option.equals("createGroup")) {
-				if (!groupDAO.alreadyExistGroup(request.getParameter("newGroup"))) {
+				if (!groupDAO.alreadyExistGroup(request.getParameter("newGroup"), username)) {
 					UserDAO usrDAO =new UserDAO();
 					User usr =  usrDAO.getUser(username);
 					if (this.createGroup(request.getParameter("newGroup"), usr)){

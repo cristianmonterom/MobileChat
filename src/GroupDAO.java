@@ -103,7 +103,29 @@ public class GroupDAO {
 			return false;
 		}
 	}
-
+	public boolean alreadyExistGroup(String groupName, String userName) {
+		
+		boolean groupAlreadyExistsForUser = false;
+		try {
+			List<Group> list = dbClient.view("group/view_getGroupsByUser")
+						.key(userName).includeDocs(true).query(Group.class);
+			
+			if (list  != null && list.size() > 0) {
+				for(Group g: list)
+				{
+					if(groupName.equals(g.getGroupName()))
+					{
+						groupAlreadyExistsForUser = true;
+							}
+				}	
+			}
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			//In case of error or exception return true to avoid group duplication
+			return true;
+		}
+		return  groupAlreadyExistsForUser;
+	}
 	public Group getGroup(String groupName) {
 		try {
 			// String token
