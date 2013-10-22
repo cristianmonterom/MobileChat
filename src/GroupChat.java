@@ -27,13 +27,15 @@ import com.google.gson.JsonObject;
 @WebServlet("/GroupChat")
 public class GroupChat extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private GroupDAO groupDAO;   
+    private GroupDAO groupDAO;
+    private GroupInvitationDAO groupInvitationDAO;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public GroupChat() {
         super();
         groupDAO = new GroupDAO();
+        groupInvitationDAO = new GroupInvitationDAO();
         // TODO Auto-generated constructor stub
     }
 
@@ -316,7 +318,41 @@ public class GroupChat extends HttpServlet {
 		return tempUserNamesList;
 		
 	}
+
+ 	private GroupInvitation GetGroupInvitation(String id)
+	{
+ 		GroupInvitation tempGroupInvitation = null;
+		try{
+			tempGroupInvitation = groupInvitationDAO.getGroupInvitation(id);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+		return tempGroupInvitation;
+	}
  	
+ 	private GroupInvitation GetGroupInvitation(String groupId, String userName)
+	{
+ 		GroupInvitation tempGroupInvitation = null;
+		try{
+			tempGroupInvitation = groupInvitationDAO.getGroupInvitation(groupId, userName);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+		return tempGroupInvitation;
+	}
+ 	
+ 	private boolean confirmInvitation(String email, String groupName, String Token) {
+		// Initialize Mac Object
+		// javax.crypto.Mac MAC = Mac.getInstance("HmacMD5");
+ 		GroupInvitation tempGroupInvitation = GetGroupInvitation(email, groupName);
+
+		if (tempGroupInvitation!= null && tempGroupInvitation.getToken().equals(Token)
+				&& tempGroupInvitation.getGroupInvitationState() == GroupInvitationState.INVITED) {
+			return true;
+		} else {
+			return false;
+		}
+	}
  	/*
 	private Group getGroup(String Name){
 		groupDAO

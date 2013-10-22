@@ -62,6 +62,22 @@ public class Mail {
 		}
 	}
 
+	public boolean sendInvitationMail(String to, String groupName, String groupOwner, String token) {
+		try {
+			String subject = "Group Email Invitation";
+			String message = "<h1>You were invited to this Amazing Group Chat called: " + groupName 
+					+ ". To accept the invitation please click the following link: </h1> <a href=\"http://swen90002-04.cis.unimelb.edu.au:8080/GroupChat/InviteConfirmation?email="
+					+ to
+					+ "&token="
+					+ token
+					+ "\" target=\"_blank\">http://swen90002-04.cis.unimelb.edu.au:8080/GroupChat/InviteConfirmation?email="
+					+ to + "&token=" + token + "</a>";
+			return sendEmail(to, subject, message);
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			return false;
+		}
+	}
 	
 	public boolean sendPasswordMail(String to, String password) {
 		try {

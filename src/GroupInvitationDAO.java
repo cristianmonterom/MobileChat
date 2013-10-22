@@ -11,11 +11,11 @@ import org.lightcouch.View;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-
-public class GroupDAO {
+public class GroupInvitationDAO {
 	private CouchDbClient dbClient;
 	
-	public GroupDAO() {
+	public GroupInvitationDAO() {
+		// TODO Auto-generated constructor stub
 		connectDatabase();
 	}
 	
@@ -29,7 +29,7 @@ public class GroupDAO {
 		dbClient = new CouchDbClient(properties);
 		}
 	
-	public boolean createGroup(Group group) {
+	public boolean createInvitation(GroupInvitation invitation) {
 		Gson gson = new Gson();
 		String json;
 		Calendar c = Calendar.getInstance();
@@ -40,7 +40,7 @@ public class GroupDAO {
 			
 			
 			// Cast the new object to JSON file to be saved in the DB
-			json = gson.toJson(group);
+			json = gson.toJson(invitation);
 
 			JsonObject jsonObj = dbClient.getGson().fromJson(json,
 					JsonObject.class);
@@ -58,66 +58,23 @@ public class GroupDAO {
 				return false;
 			}
 	}
-
-	public boolean insertGroup(String groupName, GroupMember owner) {
-		Gson gson = new Gson();
-		String json;
-		Calendar c = Calendar.getInstance();
-		Date myDate = c.getTime();
-		try {
-			Timestamp stamp = new Timestamp(myDate.getTime());
-			Group group = new Group("groupName", owner);
-			
-			// Cast the new object to JSON file to be saved in the DB
-			json = gson.toJson(group);
-
-			JsonObject jsonObj = dbClient.getGson().fromJson(json,
-					JsonObject.class);
-
-			// Saving in DB
-			Response responseCouch = dbClient.save(jsonObj);
-
-				if (!responseCouch.getId().equals("")) {
-					return true;
-				} else {
-					return false;
-				}
-			} catch (Exception e) {
-				System.out.println(e.getStackTrace());
-				return false;
-			}
-		}
-
-	public boolean alreadyExistGroup(String groupName) {
 	
-		try {
-			List<Group> list = dbClient.view("group/view_getMessages")
-						.key(groupName).includeDocs(true).limit(1).query(Group.class);
-
-			if (list.get(0) != null) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			System.out.println(e.getStackTrace());
-			return false;
-		}
-	}
-
-	public boolean alreadyExistGroup(String groupName, String userName) {
+	
+	////------------------------
+	
+	public boolean alreadyExistInvitation(String groupId, String userName) {
 		
-		boolean groupAlreadyExistsForUser = false;
+		boolean invitationAlreadyExistsForUserInGroup = false;
 		try {
-			List<Group> list = dbClient.view("group/view_getGroupsByUser")
-						.key(userName).includeDocs(true).query(Group.class);
+			List<GroupInvitation> list = dbClient.view("group/view_getGroupsByUser")
+						.key(userName).includeDocs(true).query(GroupInvitation.class);
 			
 			if (list  != null && list.size() > 0) {
-				for(Group g: list)
+				for(GroupInvitation i: list)
 				{
-					if(groupName.equals(g.getGroupName()))
+					if(groupId.equals(i.getGroupId()))
 					{
-						groupAlreadyExistsForUser = true;
+						invitationAlreadyExistsForUserInGroup = true;
 							}
 				}	
 			}
@@ -126,15 +83,15 @@ public class GroupDAO {
 			//In case of error or exception return true to avoid group duplication
 			return true;
 		}
-		return  groupAlreadyExistsForUser;
+		return  invitationAlreadyExistsForUserInGroup;
 	}
 	
-	public Group getGroupByName(String groupName) {
+	public GroupInvitation GroupInvitationState(String groupId, String userName) {
 		try {
 			// String token
 			//Change ViewName
-			List<Group> list = dbClient.view("group/view_getMessages")
-						.includeDocs(true).key(groupName).limit(1).query(Group.class);
+			List<GroupInvitation> list = dbClient.view("group/view_getGroupsByUser")
+					.key(userName).includeDocs(true).limit(1).query(GroupInvitation.class);
 
 			if (list.get(0) != null) {
 				if (list.size() > 1) {
@@ -152,12 +109,13 @@ public class GroupDAO {
 			// return null;
 	}
 
-	public Group getGroup(String id) {
+	//No vale aun Arreglar
+	public GroupInvitation getGroupInvitation(String groupId, String userName) {
 		try {
 			// String token
 			//Change ViewName
-			List<Group> list = dbClient.view("group/view_getGroup")
-						.includeDocs(true).key(id).limit(1).query(Group.class);
+			List<GroupInvitation> list = dbClient.view("group/view_getGroupsByUser")
+					.key(userName).includeDocs(true).limit(1).query(GroupInvitation.class);
 
 			if (list.get(0) != null) {
 				if (list.size() > 1) {
@@ -175,28 +133,34 @@ public class GroupDAO {
 			// return null;
 	}
 	
-	public List<Group> getGroupByUser(String userName) {
+	public GroupInvitation getGroupInvitation(String id) {
 		try {
 			// String token
 			//Change ViewName
-			//NO sense just trying to try everything as an object
-			/*
-			List<Object> listObj = dbClient.view("group/view_getGroupsByUser")
-						.includeDocs(true).key(userName).limit(1).query(Object.class);
-			*/
-			List<Group> list = dbClient.view("group/view_getGroupsByUser")
-					.includeDocs(true).key(userName).query(Group.class);
-			
-			//Trae solo las referencias con include docs false
-			/*
-			List<Group> listita = dbClient.view("group/view_getGroupsByUser")
-					.includeDocs(false).key(userName).query(Group.class);
-			*/
-			
-			//Trying to query a view
-			//View view = dbClient.view("group/view_getGroupsByUser").key(userName).reduce(false).includeDocs(true);
-			//ViewResult<>
-			
+			List<GroupInvitation> list = dbClient.view("group/view_getGroupsByUser")
+					.key(id).includeDocs(true).limit(1).query(GroupInvitation.class);
+
+			if (list.get(0) != null) {
+				if (list.size() > 1) {
+					throw new Exception("Must Return just one Object");
+				} else {
+					return list.get(0);
+				}
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			return null;
+		}
+			// return null;
+	}
+	
+	public List<GroupInvitation> getGroupInvitationsByUser(String userName) {
+		try {
+
+			List<GroupInvitation> list = dbClient.view("group/view_getGroupsByUser")
+					.key(userName).includeDocs(true).query(GroupInvitation.class);
 
 			if (list.size() > 0) {
 				return list;
@@ -210,7 +174,7 @@ public class GroupDAO {
 			// return null;
 	}
 
-	public boolean updateGroup(Group group) {
+	public boolean updateGroupInvitation(GroupInvitation invitation) {
 
 		Gson gson = new Gson();
 		String json;
@@ -221,7 +185,7 @@ public class GroupDAO {
 			//group.setTimestamp(stamp);
 			
 			// Cast the new object to JSON file to be saved in the DB
-			json = gson.toJson(group);
+			json = gson.toJson(invitation);
 			JsonObject jsonObj = dbClient.getGson().fromJson(json,
 						JsonObject.class);
 
@@ -239,12 +203,12 @@ public class GroupDAO {
 			}
 		}
 
-	public boolean remove(Group group) {
+	public boolean remove(GroupInvitation invitation) {
 		Gson gson = new Gson();
 		String json;
 		try {
 				// Cast the new object to JSON file to be saved in the DB
-			json = gson.toJson(group);
+			json = gson.toJson(invitation);
 
 			JsonObject jsonObj = dbClient.getGson().fromJson(json,
 						JsonObject.class);
@@ -263,15 +227,7 @@ public class GroupDAO {
 			}
 		}
 
-	/*
-	public boolean remove(String groupName) {
-			try {
-				User user = this.getUser(email);
-				return remove(user);
-			} catch (Exception e) {
-				System.out.println(e.getStackTrace());
-				return false;
-			}
-		}
-	*/
+	
+	
+
 }
