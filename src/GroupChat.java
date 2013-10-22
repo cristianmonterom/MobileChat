@@ -59,6 +59,7 @@ public class GroupChat extends HttpServlet {
 		try {
 			if (!request.getParameter("message").toString().equals("")) {
 				
+				List<String> members = GetGroupMembersList("6a6693a3a0aa4252b1203a16548998c8");
 				boolean test = GroupNameAlreadyExistForUser("Anormales", "dy@DaddyYankee.com");
 				boolean test2 = GroupNameAlreadyExistForUser("Rompepaletas", "dy@DaddyYankee.com");
 				
@@ -301,6 +302,21 @@ public class GroupChat extends HttpServlet {
 		return tempUserNamesList;
 		
 	}
+ 	
+ 	private List<String> GetGroupMembersList(String groupId){
+		List<String> tempUserNamesList = null;
+		
+		Group g = GetGroup(groupId);
+		
+		if(g!= null)
+		{
+			tempUserNamesList = g.getGroupUsersList();
+		}
+		
+		return tempUserNamesList;
+		
+	}
+ 	
  	/*
 	private Group getGroup(String Name){
 		groupDAO

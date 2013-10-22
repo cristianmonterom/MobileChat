@@ -1,0 +1,4 @@
+
+public enum GroupInvitationState {
+	CONFIRMED, INVITED, BLOCKED, DELETED, DISABLED, EXPIRED, UNKNOWN
+}
