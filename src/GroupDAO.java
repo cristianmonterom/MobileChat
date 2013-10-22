@@ -108,12 +108,35 @@ public class GroupDAO {
 	}
 	
 
-	public Group getGroup(String groupName) {
+	public Group getGroupByName(String groupName) {
 		try {
 			// String token
 			//Change ViewName
 			List<Group> list = dbClient.view("group/view_getMessages")
 						.includeDocs(true).key(groupName).limit(1).query(Group.class);
+
+			if (list.get(0) != null) {
+				if (list.size() > 1) {
+					throw new Exception("Must Return just one Object");
+				} else {
+					return list.get(0);
+				}
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			return null;
+		}
+			// return null;
+	}
+
+	public Group getGroup(String id) {
+		try {
+			// String token
+			//Change ViewName
+			List<Group> list = dbClient.view("group/view_getGroup")
+						.includeDocs(true).key(id).limit(1).query(Group.class);
 
 			if (list.get(0) != null) {
 				if (list.size() > 1) {

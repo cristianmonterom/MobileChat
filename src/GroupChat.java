@@ -59,6 +59,8 @@ public class GroupChat extends HttpServlet {
 		try {
 			if (!request.getParameter("message").toString().equals("")) {
 				
+				Group grupazo = GetGroup("6a6693a3a0aa4252b1203a16548998c8");
+				
 				Timestamp creationTimeStamp = getCurrentTimestamp();
 				
 				User user = new User("dy@DaddyYankee.com", "bigboss", "abc", "C", creationTimeStamp);
@@ -158,11 +160,22 @@ public class GroupChat extends HttpServlet {
 		
 	}
 	
-	private Group GetGroup(String groupName)
+	private Group GetGroupByName(String groupName)
 	{
 		Group tempGroup = null;
 		try{
-			tempGroup = groupDAO.getGroup("GroupName");
+			tempGroup = groupDAO.getGroupByName(groupName);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+		return tempGroup;
+	}
+	
+	private Group GetGroup(String id)
+	{
+		Group tempGroup = null;
+		try{
+			tempGroup = groupDAO.getGroup(id);
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
 		}
@@ -253,7 +266,7 @@ public class GroupChat extends HttpServlet {
 		
 		try{
 		
-			Group tempGroup = GetGroup(groupName);
+			Group tempGroup = GetGroupByName(groupName);
 			//If group exists and performing user is the owner
 			if(tempGroup !=null && performingUser.equals(tempGroup.getRealOwner())){
 				
@@ -270,7 +283,7 @@ public class GroupChat extends HttpServlet {
  	private List<String> GetUserNamesListByGroup(String groupName){
 		List<String> tempUserNamesList = null;
 		
-		Group g = GetGroup(groupName);
+		Group g = GetGroupByName(groupName);
 		
 		if(g!= null)
 		{
