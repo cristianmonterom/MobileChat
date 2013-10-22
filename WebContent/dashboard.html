@@ -18,22 +18,24 @@
     <div data-role="header" data-theme="c">
         <h1>Final Project</h1>
         <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
-        <a href="#about-panel" data-icon="delete" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Logout</a>
+        <form id="formLogout">
+       		<button data-theme="c" data-inline="true" data-icon="delete" id="btnLogout" class="ui-btn-right">Logout</button>
+        </form>
 		<div data-role="navbar" data-iconpos="left">
 		    <ul>
 		        <li><a href="#" data-icon="grid" class="ui-btn-active">Groups</a></li>
-		        <li><a href="#register-page" data-icon="arrow-d">Chat</a></li>
+		        <li><a href="#profile-page" data-icon="arrow-d">Profile</a></li>
 		        <li><a href="#help-panel" data-icon="info">Help</a></li>
 		    </ul>
 		</div><!-- /navbar -->
     </div><!-- /header -->
-    <div data-role="content">
+    <div data-role="content" id="divMainContent">
 		<div data-role="collapsible-set" data-theme="b">
 		
 			<div data-role="collapsible" data-collapsed="false" >
 				<h3>Groups</h3>
-				<ul data-role="listview" data-filter="true" data-split-icon="plus">
-				  <li>
+				<ul data-role="listview" data-filter="true" data-split-icon="plus" id="listGroups">
+				  <!--  <li>
 					  <a href="acura.html">Group 1</a>
 					  <span class="ui-li-count" title="Number of Members">23</span>
 					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
@@ -52,39 +54,35 @@
 					  <a href="acura.html">Group 4</a>
 					  <span class="ui-li-count" title="Number of Members">23</span>
 					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-				  </li>
+				  </li> -->
 				</ul>
 			</div>
 			
 			<div data-role="collapsible">
 			<h3>Invitations</h3>
-				<ul data-role="listview" data-filter="true" data-split-icon="plus">
-				  <li>
-					  <a href="acura.html">Invitation 1</a>
+				<ul data-role="listview" data-filter="true" data-split-icon="none"  id="listInvitations">
+				  <!--   <li>
+					  <a href="#popupOptionsInvitations" data-rel="popup" data-transition="pop" data-position-to="#divMainContent">Invitation 1</a>
 					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a data-icon="plus" href="acura.html"></a>
-					  <a href="acura.html"></a>
 				  </li>
 				  <li>
 					  <a href="acura.html">Invitation 2</a>
 					  <span class="ui-li-count" title="Number of Members">23</span>
 					  <a href="acura.html"></a>
-					  <a splitIcon="delete" href="acura.html"></a>
 				  </li>
 				  <li>
 					  <a href="acura.html">Invitation 3</a>
 					  <span class="ui-li-count" title="Number of Members">23</span>
 					  <a splitIcon="plus" href="acura.html"></a>
-					  <a splitIcon="delete" href="acura.html"></a>
-				  </li>
+				  </li> -->
 				</ul>			
 			</div>
-			
 		</div>		
     </div><!-- /content -->
     <div data-role="footer" class="ui-bar" data-theme="c">
-   		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop">Add new group</a>
-   		<a href="#invitation-page" data-icon="bars">Invite friends</a>
+   		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop" data-position-to="#divMainContent">Add new group</a>
+   		<a href="#invitation-page" data-icon="bars" onclick="setCurrentGroup(0);">Invite friends</a>
+   		<label id="gnumber"></label>
 	</div>
     <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
         <ul data-role="listview" data-theme="d" data-icon="false">
@@ -129,18 +127,46 @@
 		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d" role="main">
 			<ul data-role="listview" data-split-icon="none">
 			  <li>
-				  <a href="acura.html">Invite Friends</a>
+				  <a href="#groupusers-page" >Current Members</a>
 			  </li>
 			  <li>
-				  <a href="acura.html">Edit</a>
+				  <a href="#invitation-page" onclick="inviteFriends();">Invite Friends</a>
 			  </li>
 			  <li>
-				  <a href="acura.html">Delete</a>
+			  	<a href="#popDelete" data-rel="popup" data-position-to="#divMainContent" data-transition="pop">Delete</a>
 			  </li>
 			</ul>
 		</div>
 	</div>
 
+	<div data-role="popup" id="popupOptionsInvitations" data-overlay-theme="a" data-theme="c" style="max-width:200px;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" aria-disabled="false" data-disabled="false" data-shadow="true" data-corners="true" data-transition="none">
+		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d" role="main">
+			<ul data-role="listview" data-split-icon="none">
+			  <li>
+				  <a href="#invitation-page" onclick="acceptInvitations();">Accept</a>
+			  </li>
+			  <li>
+			  	<a href="#invitation-page" data-rel="popup" data-position-to="#divMainContent" data-transition="pop">Reject</a>
+			  </li>
+			  <li>
+				<a href="#" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Cancel</a>			  
+			  </li>
+			</ul>
+		</div>
+	</div>
+	
+	<div data-role="popup" id="popDelete" data-overlay-theme="a" data-theme="c">
+	  <div data-role="header">
+	      <h1>Delete</h1>
+	  </div>
+	  <div data-role="content">
+	  	<h3>Are you sure you want to delete the group?</h3>
+		<form id="formDelete">
+		     <input type="submit" data-theme="b" data-inline="true" id="btnYes" value="Yes" />
+		     <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Cancel</a>
+		</form>  
+	  </div>
+	</div>
 </div>
 <div data-role="page" id="chat-page" data-theme="d" data-url="chat-page">
     <div data-role="header" data-theme="c">
@@ -210,34 +236,21 @@
         <a href="#about-panel" data-icon="delete" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Logout</a>
     </div><!-- /header -->
     <div data-role="content">
-			<div class="ui-grid-a" data-theme="c">
-				<div class="ui-block-a" style="width:90% !important"><h4>Invite friend</h4></div>
-				<div class="ui-block-b" style="width:10% !important">
-				<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right">Back</button>
-				<!--  a href="#dashboard-page" data-icon="arrow-l" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Back1</a--></div>	   
-			</div>    
-		
-		<ul data-role="listview" data-filter="true" data-split-icon="plus">
-		  <li>
-			  <a href="acura.html">Member 1</a>
-			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-		  </li>
-		  <li>
-			  <a href="acura.html">Member 2</a>
-			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-		  </li>
-		  <li>
-			  <a href="acura.html">Member 3</a>
-			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-		  </li>
-		  <li>
-			  <a href="acura.html">Member 4</a>
-			  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-		  </li>
+		<div class="ui-grid-a" data-theme="c">
+			<div class="ui-block-a" style="width:90% !important"><h4>Invite friend</h4></div>
+			<div class="ui-block-b" style="width:10% !important">
+			<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBack">Back</button>
+			</div>
+		</div>  
+		<div data-role="fieldcontain" >
+			<label for="select-choice-1" class="select">To the group:</label>
+			<select name="selectlistGroup" id="selectlistGroup" data-placeholder="false">
+			</select>
+		</div>  
+		<ul data-role="listview" data-filter="true" data-split-icon="plus" id="listUsers">
 		</ul>
-	</div>
-			
     </div><!-- /content -->
+    
     <!-- div data-role="footer" class="ui-bar" data-theme="c">
    		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop">Add new group</a>
    		<a href="#popupInvitation" data-icon="bars" data-rel="popup" data-role="button" data-transition="pop">Invite friends</a>
@@ -269,6 +282,143 @@
 	    </div>
 	</div>
 	
+	<div data-role="popup" id="popConfirmInvitation" data-overlay-theme="a" data-theme="c">
+	  <div data-role="header">
+	      <h1>Send Invitation</h1>
+	  </div>
+	  <div data-role="content">
+	  	<h3>Are you sure you want to invite this member to the group?</h3>
+		<form id="formSendInvitation">
+		     <input type="submit" data-theme="b" data-inline="true" id="btnYes" value="Yes" />
+		     <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Cancel</a>
+		</form>  
+	  </div>
+	</div>	
+</div>
+
+<!-- profile -->
+<div data-role="page" id="profile-page" data-theme="d" data-url="profile-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+        <form id="formLogout">
+       		<button data-theme="c" data-inline="true" data-icon="delete" id="btnLogout" class="ui-btn-right">Logout</button>
+        </form>
+   		<div data-role="navbar" data-iconpos="left">
+		    <ul>
+		        <li><a href="#dashboard-page" data-icon="grid" >Groups</a></li>
+		        <li><a href="#" data-icon="arrow-d" class="ui-btn-active">Profile</a></li>
+		        <li><a href="#help-panel" data-icon="info">Help</a></li>
+		    </ul>
+		</div><!-- /navbar -->
+    </div><!-- /header -->
+    <div data-role="content">
+		<div class="ui-grid-a" data-theme="c">
+			<div class="ui-block-a" style="width:90% !important"><h4>Profile options</h4></div>
+			<div class="ui-block-b" style="width:10% !important">
+				<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBack">Back</button>
+			</div>	   
+		</div>    
+	    <form id="formResetPassword">
+			<h4 class="titleSection">Reset Password</h4>
+			<p class="sectionMessage">If you want to change your password click the following button.</p>
+			<!-- button
+				class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+				role="button" aria-disabled="false" id="btnResetPassword">
+				<span class="ui-button-text">Reset Password</span>
+			</button-->
+			<button data-theme="b" data-inline="true" id="btnResetPassword">Reset Password</button>
+		</form>
+		<form id="formCancelRegistration">
+			<h4 class="titleSection">Cancel Registration</h4>
+			<p class="sectionMessage">If you want to cancel your registration click the following button.</p>
+			<!-- button
+				class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+				role="button" aria-disabled="false" id="btnCancelRegistration">
+				<span class="ui-button-text">Cancel Registration</span>
+			</button-->
+			<button data-theme="b" data-inline="true" id="btnCancelRegistration">Cancel Registration</button>
+		</form>
+								
+	</div>
+	<div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+	    </div>
+	</div>
+    <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+            <h2>Help!</h2>
+            <p>You have some.
+            </p>
+        </div><!-- /article -->
+    </div><!-- /panel -->	
+</div>
+
+<!-- current members -->
+<div data-role="page" id="groupusers-page" data-theme="d" data-url="invitation-page">
+    <div data-role="header" data-theme="c">
+        <h1>Final Project</h1>
+        <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
+        <a href="#about-panel" data-icon="delete" data-shadow="false" data-iconshadow="false" class="ui-btn-right">Logout</a>
+    </div><!-- /header -->
+    <div data-role="content">
+		<div class="ui-grid-a" data-theme="c">
+			<div class="ui-block-a" style="width:90% !important"><h4>Group Members</h4></div>
+			<div class="ui-block-b" style="width:10% !important">
+			<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBack">Back</button>
+			</div>
+		</div>  
+
+		<ul data-role="listview" data-filter="true" data-split-icon="plus" id="listGroupMembers">
+
+		</ul>
+    </div><!-- /content -->
+  
+    <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
+        <ul data-role="listview" data-theme="d" data-icon="false">
+            <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+            <li data-role="list-divider">About</li>
+            <li>Cristian Montero (cmontero - 647640)</li>
+            <li>Ivan Sanchez (isanchez - 594783)</li>
+        </ul>
+    </div><!-- /panel -->
+
+    <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
+        <div class="article">
+            <h2>Help!</h2>
+            <p>You can create see all your friends of the group and if you are the owner you can delete members if you want it.
+            </p>
+        </div><!-- /article -->
+    </div><!-- /panel -->
+    
+    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+	    <div data-role="header" data-theme="c">
+	        <h3>Message</h3>
+	    </div><!-- /header -->
+	    <div data-role="content">
+			<p id="popmessage"><p>
+			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+	    </div>
+	</div>
+
+	<div data-role="popup" id="popConfirmDeletion" data-overlay-theme="a" data-theme="c">
+	  <div data-role="header">
+	      <h1>Delete Member</h1>
+	  </div>
+	  <div data-role="content">
+	  	<h3>Are you sure you want to delete this member from the group?</h3>
+		<form id="formSendInvitation">
+		     <input type="submit" data-theme="b" data-inline="true" id="btnYes" value="Yes" />
+		     <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Cancel</a>
+		</form>  
+	  </div>
+	</div>	
+
 </div>
 </body>
 </html>
