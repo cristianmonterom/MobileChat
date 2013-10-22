@@ -6,6 +6,7 @@ import java.util.List;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
 import org.lightcouch.Response;
+import org.lightcouch.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -120,6 +121,41 @@ public class GroupDAO {
 				} else {
 					return list.get(0);
 				}
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			return null;
+		}
+			// return null;
+	}
+	
+	public List<Group> getGroupByUser(String userName) {
+		try {
+			// String token
+			//Change ViewName
+			//NO sense just trying to try everything as an object
+			/*
+			List<Object> listObj = dbClient.view("group/view_getGroupsByUser")
+						.includeDocs(true).key(userName).limit(1).query(Object.class);
+			*/
+			List<Group> list = dbClient.view("group/view_getGroupsByUser")
+					.includeDocs(true).key(userName).query(Group.class);
+			
+			//Trae solo las referencias con include docs false
+			/*
+			List<Group> listita = dbClient.view("group/view_getGroupsByUser")
+					.includeDocs(false).key(userName).query(Group.class);
+			*/
+			
+			//Trying to query a view
+			//View view = dbClient.view("group/view_getGroupsByUser").key(userName).reduce(false).includeDocs(true);
+			//ViewResult<>
+			
+
+			if (list.size() > 0) {
+				return list;
 			} else {
 				return null;
 			}

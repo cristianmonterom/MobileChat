@@ -113,7 +113,7 @@ public class Group {
 		return succesfullyAdded;
 	}
 
-	public boolean DeleteGroupMember(String newUser){
+	public boolean DeleteGroupMember(String userToBeDeleted, String performingUser){
 		
 		boolean succesfullyDeleted = false;
 		
@@ -126,9 +126,9 @@ public class Group {
 			//UpdateDAO
 		}*/
 		try{
-			if(!groupUsersList.contains(newUser))
+			if(groupUsersList.contains(userToBeDeleted) && (!userToBeDeleted.equals(RealOwner)) && (userToBeDeleted.equals(performingUser) || performingUser.equals(RealOwner)))
 			{
-			groupUsersList.remove(newUser);
+			groupUsersList.remove(userToBeDeleted);
 			succesfullyDeleted = true;
 			}
 		}catch(Exception ex)
