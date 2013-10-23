@@ -61,20 +61,32 @@ public class GroupChat extends HttpServlet {
 		try {
 			if (!request.getParameter("message").toString().equals("")) {
 				
-				List<String> members = GetGroupMembersList("6a6693a3a0aa4252b1203a16548998c8");
-				boolean test = GroupNameAlreadyExistForUser("Anormales", "dy@DaddyYankee.com");
-				boolean test2 = GroupNameAlreadyExistForUser("Rompepaletas", "dy@DaddyYankee.com");
-				
 				Group grupazo = GetGroup("6a6693a3a0aa4252b1203a16548998c8");
 				
 				Timestamp creationTimeStamp = getCurrentTimestamp();
 				
 				User user = new User("dy@DaddyYankee.com", "bigboss", "abc", "C", creationTimeStamp);
 				
+				GroupInvitation gi = new GroupInvitation(user, grupazo); 
+				boolean invitationSent = gi.SendInvitation();
+				
+				String Token = "D4591294-32B6-4879-B411-C493AE3015B6";
+				confirmInvitation(user.getEmail(), grupazo.getGroupName(), Token);
+
+				
+				//groupInvitationDAO.createInvitation(gi);
+				
+				List<String> members = GetGroupMembersList("6a6693a3a0aa4252b1203a16548998c8");
+				boolean test = GroupNameAlreadyExistForUser("Anormales", "dy@DaddyYankee.com");
+				boolean test2 = GroupNameAlreadyExistForUser("Rompepaletas", "dy@DaddyYankee.com");
+				
+				
+				
+				
 				//GroupMember DY = new GroupMember(user, group)
 				//Request Names
 				
-				 GetGroupByUser(user.getEmail());
+				GetGroupByUser(user.getEmail());
 				
 				Group group = new Group("Anormales", user.getEmail());
 				
@@ -344,15 +356,22 @@ public class GroupChat extends HttpServlet {
  	private boolean confirmInvitation(String email, String groupName, String Token) {
 		// Initialize Mac Object
 		// javax.crypto.Mac MAC = Mac.getInstance("HmacMD5");
- 		GroupInvitation tempGroupInvitation = GetGroupInvitation(email, groupName);
+ 		boolean groupInvitationConfimed = false;
+ 		GroupInvitation tempGroupInvitation = GetGroupInvitation(groupName, email);
 
 		if (tempGroupInvitation!= null && tempGroupInvitation.getToken().equals(Token)
 				&& tempGroupInvitation.getGroupInvitationState() == GroupInvitationState.INVITED) {
-			return true;
-		} else {
-			return false;
+			
+			Group tempGroup = GetGroup(tempGroupInvitation.getGroupId());
+			tempGroup.AddGroupMember(email);
+			if(groupDAO.updateGroup(tempGroup))
+			{
+				groupInvitationConfimed = true;
+			}
 		}
+		return groupInvitationConfimed;
 	}
+ 	
  	/*
 	private Group getGroup(String Name){
 		groupDAO

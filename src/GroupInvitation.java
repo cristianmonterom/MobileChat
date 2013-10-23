@@ -42,14 +42,23 @@ public class GroupInvitation {
 			//If invitation state is not confirmed and exists
 			Mail oMail = new Mail();
 			invitationSent = oMail.sendInvitationMail(userName, groupName, invitationSender, token);
+			if(invitationSent)
+			{
+				this.groupInvitationState = GroupInvitationState.INVITED;
+			}
 			
 			return invitationSent;
 		}
 		
-		public boolean ConfirmInvitation()
+		public boolean ConfirmInvitation(String token)
 		{
 			boolean invitationConfirmed = false;
 			
+			if(this.token.equals(token))
+			{
+				//confirm invitation
+				invitationConfirmed = true;
+			}
 			//Change invitation State to Confirmed
 			return invitationConfirmed;
 		}
