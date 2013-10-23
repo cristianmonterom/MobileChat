@@ -49,7 +49,7 @@
     </div><!-- /content -->
     <div data-role="footer" class="ui-bar" data-theme="c">
    		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop" data-position-to="#divMainContent" >Add new group</a>
-   		<a href="#invitation-page" data-icon="bars" onclick="setCurrentGroup(0);">Invite friends</a>
+   		<a href="#invitation-page" data-icon="bars" onclick="setCurrentGroup(0, '');">Invite friends</a>
    		<label id="gnumber"></label>
 	</div>
     <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
@@ -102,7 +102,13 @@
 				  <a href="#invitation-page" onclick="inviteFriends();">Invite Friends</a>
 			  </li>
 			  <li>
+				  <a href="#invitation-page" onclick="validateOwnerGroupInvitation('You are not the owner of the group. Only owners are allowed to invite people');">Invite Friends1</a>
+			  </li>
+			  <!-- li>
 			  	<a href="#popDelete" data-rel="popup" data-position-to="#divMainContent" data-transition="pop" id="btnDelete" >Delete</a>
+			  </li-->
+			  <li>
+			  	<a href="#popDelete" data-rel="popup" data-position-to="#divMainContent" data-transition="pop" id="btnDelete" onclick="validateOwnerGroup('You are not the owner of the group. Only owners are allowed to delete groups');">Delete</a>
 			  </li>
 			</ul>
 		</div>
@@ -215,7 +221,7 @@
 		<div class="ui-grid-a" data-theme="c">
 			<div class="ui-block-a" style="width:90% !important"><h4>Invite friend</h4></div>
 			<div class="ui-block-b" style="width:10% !important">
-			<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBack">Back</button>
+				<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBackInvitation" data-role="back">Back</button>
 			</div>
 		</div>  
 		<div data-role="fieldcontain" >
@@ -227,10 +233,6 @@
 		</ul>
     </div><!-- /content -->
     
-    <!-- div data-role="footer" class="ui-bar" data-theme="c">
-   		<a href="#popupDialog" data-icon="plus" data-rel="popup" data-role="button" data-transition="pop">Add new group</a>
-   		<a href="#popupInvitation" data-icon="bars" data-rel="popup" data-role="button" data-transition="pop">Invite friends</a>
-	</div -->
     <div data-role="panel" id="about-panel" data-display="overlay" data-position="right" data-theme="c">
         <ul data-role="listview" data-theme="d" data-icon="false">
             <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>

@@ -46,6 +46,12 @@ $(document).ready(function() {
           return false;
     });		
 	
+	$("#btnBackInvitation")
+    .click(function() {
+          history.back();
+          return false;
+    });		
+
 	$("#formDelete").validate({
 		  submitHandler: function(form) {
 				deleteGroup();
@@ -131,19 +137,8 @@ function deleteRegistration() {
 	}
 }
 
-//function showMessages(div, typeOfMessage, message){
-//	$(div).empty();
-//	$(div).show();
-//	$(div).removeClass("error correct info");
-//	$(div).addClass(typeOfMessage);
-//	$(div).append(message);
-//	if (typeOfMessage == "error" || typeOfMessage == "correct") {
-//		$(div).delay(4000).fadeOut();
-//	}
-//}
-
 function showMessages(div, lblmessage, typeOfMessage, message){
-	
+	$(lblmessage).empty();
 	$(lblmessage).append(message);
 	setTimeout(function () {
 		$(div).popup("open");
@@ -154,7 +149,6 @@ function setCurrentGroup(groupId, groupName){
 	currentGroup = groupId;
 	currentGroupName = groupName;
 	isOwner();
-	//$.cookie("currentGroup", groupId);	
 	$("#gnumber").text(currentGroup);
 }
 
@@ -173,8 +167,9 @@ $(document).on("pageinit", "#dashboard-page", function () {
 	loadInvitations("#listInvitations");
 });
 
-$(document).on("pageinit", "#invitation-page", function () {
+$(document).on("pagebeforeshow", "#invitation-page", function () {
 	loadUsers("#listUsers");
+	inviteFriends();
 });
 
 $(document).on("pagebeforeshow", "#groupusers-page", function () {
@@ -324,7 +319,6 @@ function isOwner(){
 		var err = textStatus + ', ' + error;
 		console.log("Request Failed: " + err);
 	});
-	//return false;
 }
 
 function saveGroup() {
@@ -381,15 +375,26 @@ function deleteGroup() {
 	}
 }
 
-function validateOwnerGroup() {
-	isOwner();
+function validateOwnerGroup(message) {
 	if (isOwnerVar == false){
+//		alert(isOwnerVar);
 		$("#popupOptions").popup("close");
-		$("#popupError21").popup("open");
+		$("#popDelete").popup("close");
+		showMessages("#popupError21", "#popmessage21", "error", message);
+		return false;
 	} else {
+		return true;
+	}
+}
+
+function validateOwnerGroupInvitation(message) {
+	if (isOwnerVar == false){
+		history.back();
 		$("#popupOptions").popup("close");
-		$("#popDelete").popup("open");
-		
+		showMessages("#popupError21", "#popmessage21", "error", message);
+		return false;
+	} else {
+		return true;
 	}
 }
 

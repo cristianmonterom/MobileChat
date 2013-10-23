@@ -126,13 +126,13 @@ public class GroupDAO {
 		}
 		return  groupAlreadyExistsForUser;
 	}
-	public Group getGroup(String groupName) {
+
+	public Group getGroup(String id) {
 		try {
 			// String token
-			// Change ViewName
-			List<Group> list = dbClient.view("group/view_getMessages")
-					.includeDocs(true).key(groupName).limit(1)
-					.query(Group.class);
+			//Change ViewName
+			List<Group> list = dbClient.view("group/view_getGroup")
+						.includeDocs(true).key(id).limit(1).query(Group.class);
 
 			if (list.get(0) != null) {
 				if (list.size() > 1) {
@@ -147,9 +147,8 @@ public class GroupDAO {
 			System.out.println(e.getStackTrace());
 			return null;
 		}
-		// return null;
+			// return null;
 	}
-
 	public List<Group> getGroupByUser(String userName) {
 		try {
 			// String token
