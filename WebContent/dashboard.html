@@ -35,46 +35,14 @@
 			<div data-role="collapsible" data-collapsed="false" >
 				<h3>Groups</h3>
 				<ul data-role="listview" data-filter="true" data-split-icon="plus" id="listGroups">
-				  <!--  <li>
-					  <a href="acura.html">Group 1</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-				  </li>
-				  <li>
-					  <a href="acura.html">Group 2</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-				  </li>
-				  <li>
-					  <a href="acura.html">Group 3</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-				  </li>
-				  <li>
-					  <a href="acura.html">Group 4</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a href="#popupOptions" data-rel="popup" data-transition="pop"></a>
-				  </li> -->
+
 				</ul>
 			</div>
 			
 			<div data-role="collapsible">
 			<h3>Invitations</h3>
 				<ul data-role="listview" data-filter="true" data-split-icon="none"  id="listInvitations">
-				  <!--   <li>
-					  <a href="#popupOptionsInvitations" data-rel="popup" data-transition="pop" data-position-to="#divMainContent">Invitation 1</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-				  </li>
-				  <li>
-					  <a href="acura.html">Invitation 2</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a href="acura.html"></a>
-				  </li>
-				  <li>
-					  <a href="acura.html">Invitation 3</a>
-					  <span class="ui-li-count" title="Number of Members">23</span>
-					  <a splitIcon="plus" href="acura.html"></a>
-				  </li> -->
+
 				</ul>			
 			</div>
 		</div>		
@@ -101,13 +69,13 @@
         </div><!-- /article -->
     </div><!-- /panel -->
     
-    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+    <div data-role="popup" id="popupError21" data-theme="c" data-overlay-theme="a">
 	    <div data-role="header" data-theme="c">
 	        <h3>Message</h3>
 	    </div><!-- /header -->
 	    <div data-role="content">
-			<p id="popmessage"><p>
-			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+			<p id="popmessage21"><p>
+		    <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Close</a>
 	    </div>
 	</div>
 	<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c"  data-disabled="false" data-shadow="true" data-corners="true" data-transition="none">
@@ -134,7 +102,7 @@
 				  <a href="#invitation-page" onclick="inviteFriends();">Invite Friends</a>
 			  </li>
 			  <li>
-			  	<a href="#popDelete" data-rel="popup" data-position-to="#divMainContent" data-transition="pop">Delete</a>
+			  	<a href="#popDelete" data-rel="popup" data-position-to="#divMainContent" data-transition="pop" id="btnDelete" >Delete</a>
 			  </li>
 			</ul>
 		</div>
@@ -175,17 +143,24 @@
         <a href="#about-panel" data-icon="bars" data-shadow="false" data-iconshadow="false" class="ui-btn-left">About</a>
 		<div data-role="navbar" data-iconpos="left">
 		    <ul>
-		        <li><a href="#login-page" data-icon="grid">Login</a></li>
-		        <li><a href="#" data-icon="arrow-d" class="ui-btn-active">Register / Recover Password</a></li>
+		        <li><a href="#" data-icon="grid" class="ui-btn-active">Groups</a></li>
+		        <li><a href="#profile-page" data-icon="arrow-d">Profile</a></li>
 		        <li><a href="#help-panel" data-icon="info">Help</a></li>
 		    </ul>
 		</div><!-- /navbar -->        
     </div><!-- /header -->
     <div data-role="content">
-	    <h4>Group 1</h4>
+		<div class="ui-grid-a" data-theme="c">
+			<div class="ui-block-a" style="width:90% !important"><h4>Chat</h4></div>
+			<div class="ui-block-b" style="width:10% !important">
+			<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBackChat">Back</button>
+			</div>
+		</div>  
+			<select name="selectlistGroupChat" id="selectlistGroupChat" data-placeholder="false" onchange="changeGroupChat(this);">
+			</select>
 	    <div id="content">
-	    <p class="triangle-border">jjjjj</p>
-	    <span class="date">aaaaaaaaaaaaaaa</span>
+		    <p class="triangle-border">jjjjj</p>
+		    <span class="date">aaaaaaaaaaaaaaa</span>
 	    </div>
     </div>
     <div data-role="footer" class="ui-bar" data-theme="c">
@@ -279,7 +254,7 @@
 	    </div><!-- /header -->
 	    <div data-role="content">
 			<p id="popmessage"><p>
-			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Close</a>
 	    </div>
 	</div>
 	
@@ -348,7 +323,7 @@
 	    </div><!-- /header -->
 	    <div data-role="content">
 			<p id="popmessage"><p>
-			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Close</a>
 	    </div>
 	</div>
     <div data-role="panel" id="help-panel" data-display="overlay" data-position="right" data-theme="c">
@@ -369,7 +344,7 @@
     </div><!-- /header -->
     <div data-role="content">
 		<div class="ui-grid-a" data-theme="c">
-			<div class="ui-block-a" style="width:90% !important"><h4>Group Members</h4></div>
+			<div class="ui-block-a" style="width:90% !important"><h4 id="titleMembers"></h4></div>
 			<div class="ui-block-b" style="width:10% !important">
 				<button type="button" data-theme="c" data-icon="arrow-l" data-mini="true" data-inline="true" class="ui-btn-right" id="btnBack1">Back</button>
 			</div>
@@ -397,13 +372,13 @@
         </div><!-- /article -->
     </div><!-- /panel -->
     
-    <div data-role="popup" id="popupError" data-theme="c" data-overlay-theme="a">
+    <div data-role="popup" id="popupErrorMembers" data-theme="c" data-overlay-theme="a">
 	    <div data-role="header" data-theme="c">
 	        <h3>Message</h3>
 	    </div><!-- /header -->
 	    <div data-role="content">
-			<p id="popmessage"><p>
-			<a href="#" data-role="button" data-inline="true" id="btnClose">Close</a>
+			<p id="popmessagemember"><p>
+			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" >Close</a>
 	    </div>
 	</div>
 

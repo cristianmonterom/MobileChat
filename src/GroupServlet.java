@@ -71,19 +71,21 @@ public class GroupServlet extends HttpServlet {
 
 			if (option.equals("loadGroups")) {
 				result = this.GetGroupByUser(username);
-			} else if (option.equals("saveGroup")) {
-				result = this.saveGroup(request.getParameter("groupName"));
 			} else if (option.equals("loadUsers")) {
 				result = this.getPossibleUsers();
 			} else if (option.equals("sendInvitation")) {
-				result = this.saveGroup(request.getParameter("userName"));
+				result = this.getGroupMembers(request.getParameter("userName"));
 			} else if (option.equals("loadInvitations")) {
 				result = this.getInvitations();
 			} else if (option.equals("loadGroupMembers")) {
 				result = this.getGroupMembers(request.getParameter("currentGroup"));
 			} else if (option.equals("deleteGroup")) {
-				if (this.deleteGroup(request.getParameter("currentGroup"), username)){
-					CommonFunctions.returnMessage(response, TypeOfMessage.CORRECT, "Group deleted successfully.");
+				if (isOwner(request.getParameter("currentGroup"), username)) {
+					if (this.deleteGroup(request.getParameter("currentGroup"), username)){
+						CommonFunctions.returnMessage(response, TypeOfMessage.CORRECT, "Group deleted successfully.");
+					} else {
+						CommonFunctions.returnMessage(response, TypeOfMessage.ERROR, "An error occured while trying to create the group. Please try it again!");			
+					}
 				} else {
 					CommonFunctions.returnMessage(response, TypeOfMessage.ERROR, "You are not the owner of the group. You cannot delete it.");			
 				}
@@ -98,6 +100,12 @@ public class GroupServlet extends HttpServlet {
 					}
 				} else {
 					CommonFunctions.returnMessage(response, TypeOfMessage.ERROR, "You cannot have two groups with the same name.");			
+				}
+			} else if (option.equals("checkOwner")) {
+				if (isOwner(request.getParameter("currentGroup"), username)) {
+					CommonFunctions.returnMessage(response, TypeOfMessage.CORRECT, "OK");
+				} else {
+					CommonFunctions.returnMessage(response, TypeOfMessage.CORRECT, "ERROR");
 				}
 			}
 
@@ -132,14 +140,6 @@ public class GroupServlet extends HttpServlet {
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
-			return "{}";
-		}
-	}
-
-	protected String saveGroup(String groupName) {
-		try {
-			return "{}";
-		} catch (Exception e) {
 			return "{}";
 		}
 	}
@@ -200,12 +200,12 @@ public class GroupServlet extends HttpServlet {
 		}
 	}
 
-	protected String getGroupMembers(String groupName) {
+	protected String getGroupMembers(String groupId) {
 		Group tempGroup = null;
 		List<String> tempUserNamesList = null;
 		try {
 			boolean hasElements = false;
-			tempGroup = groupDAO.getGroup(groupName);
+			tempGroup = groupDAO.getGroup(groupId);
 			
 			if(tempGroup!= null){
 				tempUserNamesList = tempGroup.getGroupUsersList();
@@ -257,6 +257,21 @@ public class GroupServlet extends HttpServlet {
 		}
 
 		return groupCreatedSuccesfully;
+
+	}
+	
+	private boolean isOwner(String groupId, String user) {
+		try {
+			Group group = groupDAO.getGroup(groupId);
+			// If group doesn't exists
+			if (group.getRealOwner().equals(user)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception ex) {
+			return false;
+		}
 
 	}
 }

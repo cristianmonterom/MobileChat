@@ -1,4 +1,5 @@
 var currentGroup = 0;
+var currentGroupName = '';
 var currentUser = '';
 var currentInvitation = 0;
 var servlet = "GroupServlet";
@@ -38,9 +39,17 @@ $(document).ready(function() {
           history.back();
           return false;
     });	
+
+	$("#btnBackChat")
+    .click(function() {
+          history.back();
+          return false;
+    });		
 	
-	$( "#btnDelete" ).click(function() {
-		validateOwnerGroup();
+	$("#formDelete").validate({
+		  submitHandler: function(form) {
+				deleteGroup();
+		  }
 		});
 });
 
@@ -134,12 +143,17 @@ function deleteRegistration() {
 //}
 
 function showMessages(div, lblmessage, typeOfMessage, message){
-	$(div).popup("open");
+	
 	$(lblmessage).append(message);
+	setTimeout(function () {
+		$(div).popup("open");
+    }, 100);
 }
 
-function setCurrentGroup(groupId){
+function setCurrentGroup(groupId, groupName){
 	currentGroup = groupId;
+	currentGroupName = groupName;
+	isOwner();
 	//$.cookie("currentGroup", groupId);	
 	$("#gnumber").text(currentGroup);
 }
@@ -163,7 +177,7 @@ $(document).on("pageinit", "#invitation-page", function () {
 	loadUsers("#listUsers");
 });
 
-$(document).on("pageinit", "#groupusers-page", function () {
+$(document).on("pagebeforeshow", "#groupusers-page", function () {
 	loadGroupMembers("#listGroupMembers");
 });
 
@@ -173,9 +187,9 @@ function loadGroups() {
 	}).done(function(data) {
 		var output = '';
 		$.each(data, function(i, item) {
-			output += '<li><a href="#chat" >' +item.name+ '</a>';
+			output += '<li><a href="#chat-page" onclick="setCurrentGroup(\'' + item.id + '\', \'' + item.name + '\'); chat();">' +item.name+ '</a>';
 			//output += '<span class="ui-li-count" title="Number of Members">' +item.numberMembers+ '</span>';
-			output += '<a href="#popupOptions" data-rel="popup" data-transition="pop" onclick="setCurrentGroup(\'' + item.id + '\')"></a>';
+			output += '<a href="#popupOptions" data-rel="popup" data-transition="pop" onclick="setCurrentGroup(\'' + item.id + '\', \'' + item.name + '\')"></a>';
 			output += '</li>';
 		});
 		$('#listGroups').html(output);
@@ -189,6 +203,7 @@ function loadGroups() {
 function inviteFriends(){
 	loadGroupsSelect("#selectlistGroup");
 }
+
 
 function loadGroupsSelect(control) {
 	$.getJSON("GroupServlet", {
@@ -265,16 +280,17 @@ function acceptInvitations(){
 }
 
 function loadGroupMembers(control) {
-	var isOwner = isOwner();
-	
+	$("#titleMembers").empty();
+	$("#titleMembers").append("Members of " + currentGroupName);
 	$.getJSON(servlet, {
 		"action" : "loadGroupMembers",
 		"currentGroup" : currentGroup
 	}).done(function(data) {
+		
 		var output = '';
 		for (var i = 0; i< data.length; i++) {
 			output += '<li>';
-			if (isOwner) {
+			if (isOwnerVar == true) {
 				output += '<a href="#popConfirmDeletion" data-rel="popup" data-transition="pop" onclick="setCurrentUser(\'' +data[i]+ '\');">' +data[i]+ '</a>';
 			} else {
 				output += '<a href="#" data-rel="popup" data-transition="pop" onclick="setCurrentUser(\'' +data[i]+ '\');">' +data[i]+ '</a>';
@@ -283,12 +299,13 @@ function loadGroupMembers(control) {
 		}
 		$(control).html(output);
 		$(control).listview('refresh');
+		 // $.mobile.activePage.trigger("refresh");
 	}).fail(function(jqxhr, textStatus, error) {
 		var err = textStatus + ', ' + error;
 		console.log("Request Failed: " + err);
 	});
 }
-
+var isOwnerVar = false;
 function isOwner(){
 	$.getJSON(servlet, {
 		"action" : "checkOwner",
@@ -296,8 +313,10 @@ function isOwner(){
 	}).done(function(data) {
 		$.each(data, function(i, item) {
 			if (item.typeOfMessage == "correct" && item.message == "OK"){
+				isOwnerVar = true;
 				return true;
 			} else {
+				isOwnerVar = false;
 				return false;
 			}
 		});
@@ -336,38 +355,78 @@ function saveGroup() {
 
 
 function deleteGroup() {
-	var isOwner1 = isOwner();
-	if (!isOwner1){
-		showMessages("#popupError", "#popmessage", "error", "You are not the owner of the group. You cannot delete it.");
-		return;
-	}
-	$.getJSON(servlet, {
-		"action" : "deleteGroup",
-		"currentGroup" : currentGroup
-	}).done(function(data) {
-		$.each(data, function(i, item) {
-			if (item.typeOfMessage == "correct") {
-				//$("#popupDialog").popup( "close" );
-				loadGroups();
-			} else {
-				//$("#popmessagegroup").append(item.message);
-				showMessages("#popupError", "#popmessage", item.typeOfMessage, item.message);
-			}
+	if (isOwnerVar == false){
+		$("#popDelete").popup("close");
+		showMessages("#popupError21", "#popmessage21", "error", "You are not the owner of the group. You cannot delete it.");
+	} else {
+		$.getJSON(servlet, {
+			"action" : "deleteGroup",
+			"currentGroup" : currentGroup
+		}).done(function(data) {
+			$.each(data, function(i, item) {
+				if (item.typeOfMessage == "correct") {
+					//$("#popupDialog").popup( "close" );
+					$("#popDelete").popup("close");
+					loadGroups();
+				} else {
+					//$("#popmessagegroup").append(item.message);
+					$("#popDelete").popup("close");
+					showMessages("#popupError21", "#popmessage21", item.typeOfMessage, item.message);
+				}
+			});
+		}).fail(function(jqxhr, textStatus, error) {
+			var err = textStatus + ', ' + error;
+			console.log("Request Failed: " + err);
 		});
-	}).fail(function(jqxhr, textStatus, error) {
-		var err = textStatus + ', ' + error;
-		console.log("Request Failed: " + err);
-	});
+	}
 }
 
 function validateOwnerGroup() {
-	var isOwner1 = isOwner();
-	alert(isOwner1);
-	if (!isOwner1){
-		showMessages("#popupError", "#popmessage", "error", "You are not the owner of the group. You cannot delete it.");
-		$("#popupError").popup("open");
-		return false;
+	isOwner();
+	if (isOwnerVar == false){
+		$("#popupOptions").popup("close");
+		$("#popupError21").popup("open");
+	} else {
+		$("#popupOptions").popup("close");
+		$("#popDelete").popup("open");
+		
 	}
-	$("#popDelete").popup("open");
-	return true;
+}
+
+////////////////////////////////////
+//chat functions
+///////////////////////////////////
+
+function changeGroupChat(object){
+	currentGroupName = $(object).find(":selected").text();
+	currentGroup = $(object).find(":selected").val();
+	$("#content").html("");
+//	alert(currentGroupName + currentGroup);
+}
+
+function chat(){
+	loadGroupsSelect("#selectlistGroupChat");
+	loadChat();
+}
+
+function loadChat() {
+	$.getJSON("Chat", {
+		"currentGroup" : currentGroup,
+		"user" : $("#username").val(),
+		"message" : $("#message").val(),
+		"lastmessage" : $("#lastmessage").val()
+	}).done(
+			function(data) {
+				$.each(data, function(i, item) {
+					var msgp = "<p class=\"triangle-border\">" + item.message
+							+ "</p> ";
+					var msgs = "<span class=\"date\">" + item.timestamp
+							+ " -- " + item.username + "</span>";
+					$("#content").html($("#content").html() + msgp + msgs);
+					$("#lastmessage").val(item.id);
+				});
+			}).fail(function(jqxhr, textStatus, error) {
+		var err = textStatus + ', ' + error;
+		console.log("Request Failed: " + err);
+	});
 }
