@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 public class GroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public ArrayList<Group1> lstGroup = new ArrayList<Group1>();
 	public int messageNumber;
 	private final Object lockObject = new Object();
 	private GroupDAO groupDAO;
