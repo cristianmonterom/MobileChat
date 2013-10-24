@@ -1,11 +1,17 @@
+import java.io.IOException;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.json.simple.JSONStreamAware;
+import org.json.simple.JSONValue;
 
-public class Group {
+
+public class Group  implements JSONStreamAware, Comparable<Group> {
 	
 	private String _id;
 	private String _rev;
@@ -62,7 +68,21 @@ public class Group {
 		
 	}
 	
-	
+	public Group(String id, String groupName, String realOwner) {
+		this._id = id;
+		this.groupName = groupName;
+		this.RealOwner = realOwner;
+		
+		groupMessages = new ArrayList<ChatMessage>();
+		groupUsers = new ArrayList<User>();
+		this.groupUsersList = new ArrayList<String>();
+		this.groupUsersList.add(realOwner);
+		
+		Calendar c = Calendar.getInstance();
+		Date myDate = c.getTime();
+		creationTimeStamp = new Timestamp(myDate.getTime());
+		
+	}	
 	public void AddMessage(ChatMessage message)
 	{
 		groupMessages.add(message);
@@ -243,7 +263,19 @@ public class Group {
 	public Timestamp getCreationTimeStamp() {
 		return creationTimeStamp;
 	}
-	
-	
+
+	@Override
+	public int compareTo(Group arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void writeJSONString(Writer out) throws IOException {
+		LinkedHashMap obj = new LinkedHashMap();
+		obj.put("id", this.get_id());
+		obj.put("name", groupName);
+		obj.put("numberMembers", groupUsersList.size());
+		JSONValue.writeJSONString(obj, out);
+	}
 	
 }

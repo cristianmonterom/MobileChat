@@ -79,6 +79,7 @@ public class Mail {
 		}
 	}
 	
+	
 	public boolean sendPasswordMail(String to, String password) {
 		try {
 			String subject = "Password Email";
