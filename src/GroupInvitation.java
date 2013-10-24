@@ -57,6 +57,7 @@ public class GroupInvitation {
 			if(this.token.equals(token))
 			{
 				//confirm invitation
+				this.groupInvitationState = GroupInvitationState.CONFIRMED;
 				invitationConfirmed = true;
 			}
 			//Change invitation State to Confirmed

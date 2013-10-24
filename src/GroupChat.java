@@ -63,15 +63,22 @@ public class GroupChat extends HttpServlet {
 				
 				Group grupazo = GetGroup("6a6693a3a0aa4252b1203a16548998c8");
 				
+				
+				
 				Timestamp creationTimeStamp = getCurrentTimestamp();
 				
 				User user = new User("dy@DaddyYankee.com", "bigboss", "abc", "C", creationTimeStamp);
 				
 				GroupInvitation gi = new GroupInvitation(user, grupazo); 
-				boolean invitationSent = gi.SendInvitation();
+				
+				
+				boolean invitationSent = SendGroupInvitationToUser(user, grupazo, grupazo.getRealOwner());
 				
 				String Token = "D4591294-32B6-4879-B411-C493AE3015B6";
-				confirmInvitation(user.getEmail(), grupazo.getGroupName(), Token);
+				boolean invitationConfirmed = ConfirmGroupInvitation(user.getEmail(), grupazo.getGroupName(), Token);
+				
+				
+				
 
 				
 				//groupInvitationDAO.createInvitation(gi);
@@ -156,6 +163,7 @@ public class GroupChat extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	//----------------------------GROUPS------------------------------------------
 	private boolean createGroup(String groupName, User user)
 	{
 		boolean groupCreatedSuccesfully = false;
@@ -331,6 +339,24 @@ public class GroupChat extends HttpServlet {
 		
 	}
 
+ 	//----------------------------INVITATIONS------------------------------------------
+ 	private boolean SendGroupInvitationToUser(User user, Group group, String performingUser)
+ 	{
+ 		boolean groupInvitationSent = false;
+ 		GroupInvitation tempGroupInvitation = new GroupInvitation(user, group);
+ 		if(performingUser.equals(group.getRealOwner()))
+ 		{
+		boolean invitationSent = tempGroupInvitation.SendInvitation();
+			if (invitationSent)
+			{
+				groupInvitationSent = groupInvitationDAO.updateGroupInvitation(tempGroupInvitation);
+			}
+ 		}
+ 		//Else debe de alguna manera devolver que no es el dueno y por eso no puede invitar
+		
+		return groupInvitationSent;
+ 	}
+ 	
  	private GroupInvitation GetGroupInvitation(String id)
 	{
  		GroupInvitation tempGroupInvitation = null;
@@ -353,15 +379,16 @@ public class GroupChat extends HttpServlet {
 		return tempGroupInvitation;
 	}
  	
- 	private boolean confirmInvitation(String email, String groupName, String Token) {
+ 	private boolean ConfirmGroupInvitation(String email, String groupName, String Token) {
 		// Initialize Mac Object
 		// javax.crypto.Mac MAC = Mac.getInstance("HmacMD5");
  		boolean groupInvitationConfimed = false;
  		GroupInvitation tempGroupInvitation = GetGroupInvitation(groupName, email);
 
-		if (tempGroupInvitation!= null && tempGroupInvitation.getToken().equals(Token)
+		if (tempGroupInvitation!= null && tempGroupInvitation.ConfirmInvitation(Token)
 				&& tempGroupInvitation.getGroupInvitationState() == GroupInvitationState.INVITED) {
 			
+			groupInvitationDAO.updateGroupInvitation(tempGroupInvitation);
 			Group tempGroup = GetGroup(tempGroupInvitation.getGroupId());
 			tempGroup.AddGroupMember(email);
 			if(groupDAO.updateGroup(tempGroup))

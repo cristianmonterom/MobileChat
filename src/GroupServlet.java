@@ -178,21 +178,9 @@ public class GroupServlet extends HttpServlet {
 
 	protected String getInvitations() {
 		try {
-			boolean hasElements = false;
-			JSONArray groups = new JSONArray();
-
-			for (int i = 0; i < 10; i++) {
-				groups.add(new Group1(i + 1, "invitation groupaa " + (i + 1)));
-				hasElements = true;
-			}
-			StringWriter out = new StringWriter();
-
-			if (hasElements) {
-				groups.writeJSONString(out);
-				return out.toString();
-			} else {
+			
 				return "{}";
-			}
+			
 
 		} catch (Exception e) {
 			return "{}";

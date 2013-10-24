@@ -26,13 +26,8 @@ public class GroupDAO {
 		properties.setHost("localhost");
 		properties.setPort(5984);
 		dbClient = new CouchDbClient(properties);
-<<<<<<< HEAD
 		}
-	
-=======
-	}
 
->>>>>>> branch 'master' of https://github.com/cristianmonterom/MobileChat.git
 	public boolean createGroup(Group group) {
 		Gson gson = new Gson();
 		String json;
@@ -108,34 +103,7 @@ public class GroupDAO {
 			return false;
 		}
 	}
-<<<<<<< HEAD
-=======
-	public boolean alreadyExistGroup(String groupName, String userName) {
-		
-		boolean groupAlreadyExistsForUser = false;
-		try {
-			List<Group> list = dbClient.view("group/view_getGroupsByUser")
-						.key(userName).includeDocs(true).query(Group.class);
-			
-			if (list  != null && list.size() > 0) {
-				for(Group g: list)
-				{
-					if(groupName.equals(g.getGroupName()))
-					{
-						groupAlreadyExistsForUser = true;
-							}
-				}	
-			}
-		} catch (Exception e) {
-			System.out.println(e.getStackTrace());
-			//In case of error or exception return true to avoid group duplication
-			return true;
-		}
-		return  groupAlreadyExistsForUser;
-	}
->>>>>>> branch 'master' of https://github.com/cristianmonterom/MobileChat.git
 
-<<<<<<< HEAD
 	public boolean alreadyExistGroup(String groupName, String userName) {
 		
 		boolean groupAlreadyExistsForUser = false;
@@ -161,14 +129,12 @@ public class GroupDAO {
 	}
 	
 	public Group getGroupByName(String groupName) {
-=======
-	public Group getGroup(String id) {
->>>>>>> branch 'master' of https://github.com/cristianmonterom/MobileChat.git
+
 		try {
 			// String token
 			//Change ViewName
 			List<Group> list = dbClient.view("group/view_getGroup")
-						.includeDocs(true).key(id).limit(1).query(Group.class);
+						.includeDocs(true).key(groupName).limit(1).query(Group.class);
 
 			if (list.get(0) != null) {
 				if (list.size() > 1) {
@@ -185,7 +151,6 @@ public class GroupDAO {
 		}
 			// return null;
 	}
-<<<<<<< HEAD
 
 	public Group getGroup(String id) {
 		try {
@@ -210,8 +175,7 @@ public class GroupDAO {
 			// return null;
 	}
 	
-=======
->>>>>>> branch 'master' of https://github.com/cristianmonterom/MobileChat.git
+
 	public List<Group> getGroupByUser(String userName) {
 		try {
 			// String token
