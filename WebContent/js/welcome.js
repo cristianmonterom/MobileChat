@@ -377,7 +377,6 @@ function deleteGroup() {
 
 function validateOwnerGroup(message) {
 	if (isOwnerVar == false){
-//		alert(isOwnerVar);
 		$("#popupOptions").popup("close");
 		$("#popDelete").popup("close");
 		showMessages("#popupError21", "#popmessage21", "error", message);
@@ -389,11 +388,20 @@ function validateOwnerGroup(message) {
 
 function validateOwnerGroupInvitation(message) {
 	if (isOwnerVar == false){
-		history.back();
-		$("#popupOptions").popup("close");
+		//history.back();
+		setTimeout(function () {
+			$("#popupOptions").popup("close");
+		}, 100);
 		showMessages("#popupError21", "#popmessage21", "error", message);
 		return false;
 	} else {
+		//alert(isOwnerVar);
+//		setTimeout(function () {
+//			$("#popupOptions").popup("close");
+//	    }, 100);
+		//setTimeout(function () {
+			$("#invitation-page").panel("open");
+	    //}, 100);
 		return true;
 	}
 }
